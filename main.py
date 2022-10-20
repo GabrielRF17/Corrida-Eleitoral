@@ -1,6 +1,7 @@
 import pygame
 import os
 from random import randint
+import random
 pygame.init()
 
 TELA_LARGURA = 1380
@@ -187,18 +188,15 @@ while run:
                             movimento_Cima = False
                     if event.key == pygame.K_s:
                             movimento_Baixo = False
+                            
             #se lula encontar com bolsonaro depois de 10 segudos que o jogo começou, o jogo acaba
-            if jogador.rect.colliderect(inimigo.rect):
-                if pygame.time.get_ticks() - tempo > 10000:
-                    run = False
             encontro = pygame.image.load('lulabolso.jpg')
-            if jogador.rect.colliderect(inimigo.rect):
+            if pygame.time.get_ticks() - tempo > 10000:
+             if jogador.rect.colliderect(inimigo.rect):
                 tela.blit(encontro, (0, 0))
                 pygame.display.update()
                 pygame.time.delay(1000)
                 run = False
-
-
 
 
     pygame.display.update()
