@@ -18,6 +18,7 @@ pygame.mixer.init()
 pygame.mixer.music.load('musicafundo.mp3')
 pygame.mixer.music.play(-1)
 
+tempo =  0
 movimento_esquerda = False
 movimento_direita = False
 movimento_Cima = False
@@ -137,8 +138,6 @@ while run:
     jogador.atualizar_animacao()
     jogador.desenho()
     inimigo.desenho()
-    
-
     if jogador.vivo:
             if movimento_esquerda or movimento_direita or movimento_Cima or movimento_Baixo:
                 jogador.atualizar_acao(1)
@@ -188,6 +187,19 @@ while run:
                             movimento_Cima = False
                     if event.key == pygame.K_s:
                             movimento_Baixo = False
+            #se lula encontar com bolsonaro depois de 10 segudos que o jogo começou, o jogo acaba
+            if jogador.rect.colliderect(inimigo.rect):
+                if pygame.time.get_ticks() - tempo > 10000:
+                    run = False
+            encontro = pygame.image.load('lulabolso.jpg')
+            if jogador.rect.colliderect(inimigo.rect):
+                tela.blit(encontro, (0, 0))
+                pygame.display.update()
+                pygame.time.delay(1000)
+                run = False
+
+
+
 
     pygame.display.update()
 
