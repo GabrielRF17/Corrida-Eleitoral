@@ -145,10 +145,22 @@ while run:
             
                 
             else:
+                #faz o bolsonaro se movimntar aleatoriamente atras do lula
+                if inimigo.rect.x > jogador.rect.x:
+                    inimigo.rect.x -= inimigo.velocidade
+                if inimigo.rect.x < jogador.rect.x:
+                    inimigo.rect.x += inimigo.velocidade
+                if inimigo.rect.y > jogador.rect.y:
+                    inimigo.rect.y -= inimigo.velocidade
+                if inimigo.rect.y < jogador.rect.y:
+                    inimigo.rect.y += inimigo.velocidade
                 jogador.atualizar_acao(0)
-                #aqui envia os movimentos que o personagem vai fazer por Falso e True
-            jogador.movimento(movimento_esquerda, movimento_direita , movimento_Cima, movimento_Baixo)
-            inimigo.movimento(movimento_direita, movimento_esquerda , movimento_Baixo, movimento_Cima)
+                inimigo.atualizar_acao(0)
+            jogador.movimento(movimento_esquerda, movimento_direita, movimento_Cima, movimento_Baixo)
+            inimigo.movimento(movimento_esquerda, movimento_direita, movimento_Cima, movimento_Baixo)
+
+
+   
     for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
