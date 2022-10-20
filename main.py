@@ -37,14 +37,7 @@ class Lula(pygame.sprite.Sprite):
         self.frame_index = 0
         self.acao = 0
         self.atualizar_tempo = pygame.time.get_ticks()
-        self.h=200
-        self.v=200
-        self.d=False
-        self.e=False
-        self.c=False
-        self.b=False
-        
-        
+
         animacao_tipo = ['Parado', 'Correr' ]
         scale=1
         for animacao in animacao_tipo:
@@ -52,12 +45,7 @@ class Lula(pygame.sprite.Sprite):
             numero_de_frames = len(os.listdir(f'img/{self.jogador_tipo}/{animacao}'))
             for i in range(numero_de_frames):
                 img = pygame.image.load(f'img/{self.jogador_tipo}/{animacao}/{i}.png')
-                
-                if img == 'Lula':
-                    img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
-                if img ==  'Bolsonaro':
-                    img = pygame.transform.scale(img, (int(img.get_width() * 5), int(img.get_height() * 5)))
-
+                img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
                 temp_list.append(img)
             self.animacao_lista.append(temp_list)
 
@@ -128,7 +116,7 @@ class Lula(pygame.sprite.Sprite):
     def desenho(self):
             tela.blit(pygame.transform.flip(self.image, self.virar, False), self.rect)
 
-
+#personagens e seu local de imagens, local no mapa e velocidade
 jogador = Lula('Lula', 50, 50, 2, 10)
 inimigo = Lula('Bolsonaro', 200, 200, 2, 20)
 
@@ -152,6 +140,7 @@ while run:
                 
             else:
                 jogador.atualizar_acao(0)
+                #aqui envia os movimentos que o personagem vai fazer por Falso e True
             jogador.movimento(movimento_esquerda, movimento_direita , movimento_Cima, movimento_Baixo)
             inimigo.movimento(movimento_direita, movimento_esquerda , movimento_Baixo, movimento_Cima)
     for event in pygame.event.get():
