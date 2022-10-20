@@ -1,6 +1,6 @@
 import pygame
 import os
-
+from random import randint
 pygame.init()
 
 TELA_LARGURA = 1380
@@ -20,7 +20,7 @@ movimento_Baixo = False
 tela_fundo = (227, 38, 54)
 
 def desenho_tela():
-    fundo=pygame.image.load('img/Fundo/0.jpg')
+    fundo=pygame.image.load('Fundo/0.jpg')
     tela.blit(fundo,(0,0))
 
 class Lula(pygame.sprite.Sprite):
@@ -37,14 +37,27 @@ class Lula(pygame.sprite.Sprite):
         self.frame_index = 0
         self.acao = 0
         self.atualizar_tempo = pygame.time.get_ticks()
-        animacao_tipo = ['Correr', 'Lulinha' ]
+        self.h=200
+        self.v=200
+        self.d=False
+        self.e=False
+        self.c=False
+        self.b=False
+        
+        
+        animacao_tipo = ['Parado', 'Correr' ]
         scale=1
         for animacao in animacao_tipo:
             temp_list = []
-            numero_de_frames = len(os.listdir(f'img/{animacao}'))
+            numero_de_frames = len(os.listdir(f'img/{self.jogador_tipo}/{animacao}'))
             for i in range(numero_de_frames):
-                img = pygame.image.load(f'img/{animacao}/{i}.png')
-                img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
+                img = pygame.image.load(f'img/{self.jogador_tipo}/{animacao}/{i}.png')
+                
+                if img == 'Lula':
+                    img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
+                if img ==  'Bolsonaro':
+                    img = pygame.transform.scale(img, (int(img.get_width() * 5), int(img.get_height() * 5)))
+
                 temp_list.append(img)
             self.animacao_lista.append(temp_list)
 
@@ -57,32 +70,42 @@ class Lula(pygame.sprite.Sprite):
 
         dx = 0
         dy = 0
-
-        if movimento_esquerda:
+        
+        
+        if movimento_esquerda and self.rect.x > 0:
+            
             dx = -self.velocidade
             self.virar = True
             self.direcao = -1
-        if movimento_direita:
+            
+        if movimento_direita and self.rect.x < 1300:
 
             dx = self.velocidade
             self.virar = False
             self.direcao = 1
-
-        if movimento_Baixo:
-
-            dy = -self.velocidade
-            self.virar = False
-            self.direcao = -1
-        
-        if movimento_Cima:
+            
+        if movimento_Baixo and self.rect.y < 560:
 
             dy = self.velocidade
             self.virar = False
             self.direcao = 1
+            
+        if movimento_Cima and self.rect.y > 0:
 
+            dy = -self.velocidade
+            self.virar = False
+            self.direcao = -1
+            
+        if movimento_esquerda and movimento_Baixo:
+            self.virar = True
+        
+        if movimento_esquerda and movimento_Cima:
+            self.virar = True
+        
         self.rect.x += dx
         self.rect.y += dy
-
+        
+        
     def atualizar_animacao(self):
             ANIMACAO_FRESH = 150
 
@@ -106,7 +129,8 @@ class Lula(pygame.sprite.Sprite):
             tela.blit(pygame.transform.flip(self.image, self.virar, False), self.rect)
 
 
-jogador = Lula('jogador', 50, 50, 2, 5)
+jogador = Lula('Lula', 50, 50, 2, 10)
+inimigo = Lula('Bolsonaro', 200, 200, 2, 20)
 
 
 
@@ -118,16 +142,18 @@ while run:
 
     jogador.atualizar_animacao()
     jogador.desenho()
+    inimigo.desenho()
     
 
     if jogador.vivo:
             if movimento_esquerda or movimento_direita or movimento_Cima or movimento_Baixo:
                 jogador.atualizar_acao(1)
+            
                 
             else:
                 jogador.atualizar_acao(0)
             jogador.movimento(movimento_esquerda, movimento_direita , movimento_Cima, movimento_Baixo)
-
+            inimigo.movimento(movimento_direita, movimento_esquerda , movimento_Baixo, movimento_Cima)
     for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -138,9 +164,9 @@ while run:
                             movimento_esquerda = True
                     if event.key == pygame.K_d:
                             movimento_direita = True
-                    if event.key == pygame.K_s:
-                            movimento_Cima = True
                     if event.key == pygame.K_w:
+                            movimento_Cima = True
+                    if event.key == pygame.K_s:
                             movimento_Baixo = True
                     
                     if event.key == pygame.K_ESCAPE:
@@ -151,9 +177,9 @@ while run:
                             movimento_esquerda = False
                     if event.key == pygame.K_d:
                             movimento_direita = False
-                    if event.key == pygame.K_s:
-                            movimento_Cima = False
                     if event.key == pygame.K_w:
+                            movimento_Cima = False
+                    if event.key == pygame.K_s:
                             movimento_Baixo = False
 
     pygame.display.update()
