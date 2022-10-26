@@ -1,6 +1,7 @@
 import pygame
 import os
 from random import randint
+import random
 pygame.init()
 
 TELA_LARGURA = 1380
@@ -12,6 +13,13 @@ pygame.display.set_caption('Fome Zero')
 relogio = pygame.time.Clock()
 FPS = 60
 
+#Colocando a música de fundo do jogo
+
+pygame.mixer.init()
+pygame.mixer.music.load('musicafundo.mp3')
+pygame.mixer.music.play(-1)
+
+tempo =  0
 movimento_esquerda = False
 movimento_direita = False
 movimento_Cima = False
@@ -20,7 +28,7 @@ movimento_Baixo = False
 tela_fundo = (227, 38, 54)
 
 def desenho_tela():
-    fundo=pygame.image.load('Fundo/0.jpg')
+    fundo=pygame.image.load('0.jpg')
     tela.blit(fundo,(0,0))
 
 class Lula(pygame.sprite.Sprite):
@@ -37,7 +45,7 @@ class Lula(pygame.sprite.Sprite):
         self.frame_index = 0
         self.acao = 0
         self.atualizar_tempo = pygame.time.get_ticks()
-
+        
         animacao_tipo = ['Parado', 'Correr' ]
         scale=1
         for animacao in animacao_tipo:
@@ -52,13 +60,20 @@ class Lula(pygame.sprite.Sprite):
         self.image = self.animacao_lista[self.acao][self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
+    def mov(self,movimento_direita):
+            dx=0
+            if self.rect.x>randint(1500,100000):
+                self.rect.x=-50
+            dx = self.velocidade
+            self.virar = False
+            self.direcao = 1
+            self.rect.x += dx
 
     def movimento(self, movimento_esquerda, movimento_direita, movimento_Cima, movimento_Baixo):
 
 
         dx = 0
-        dy = 0
-        
+        dy=0
         
         if movimento_esquerda and self.rect.x > 0:
             
@@ -71,7 +86,7 @@ class Lula(pygame.sprite.Sprite):
             dx = self.velocidade
             self.virar = False
             self.direcao = 1
-            
+        
         if movimento_Baixo and self.rect.y < 560:
 
             dy = self.velocidade
@@ -92,7 +107,7 @@ class Lula(pygame.sprite.Sprite):
         
         self.rect.x += dx
         self.rect.y += dy
-        
+       
         
     def atualizar_animacao(self):
             ANIMACAO_FRESH = 150
@@ -118,8 +133,17 @@ class Lula(pygame.sprite.Sprite):
 
 #personagens e seu local de imagens, local no mapa e velocidade
 jogador = Lula('Lula', 50, 50, 2, 10)
-inimigo = Lula('Bolsonaro', 200, 200, 2, 20)
-
+inimigo = Lula('Bolsonaro', 500, 500, 2, 40)
+jacare =  Lula('inimigo',50,200,2,20)
+jacare1 = Lula('inimigo',-50,400,2,20)
+jacare2 = Lula('inimigo',10,350,2,40)
+jacare3 = Lula('inimigo',20,300,2,30)
+jacare4 = Lula('inimigo',-30,250,2,10)
+jacare5 = Lula('inimigo',50,250,2,50)
+jacare6 = Lula('inimigo',-50,250,2,15)
+jacare7 = Lula('inimigo',10,250,2,22)
+jacare8 = Lula('inimigo',20,250,2,35)
+jacare9 = Lula('inimigo',-30,250,2,41)
 
 
 run = True
@@ -131,18 +155,49 @@ while run:
     jogador.atualizar_animacao()
     jogador.desenho()
     inimigo.desenho()
-    
-
+    jacare.desenho()
+    jacare1.desenho()
+    jacare2.desenho()
+    jacare3.desenho()
+    jacare4.desenho()
+    jacare5.desenho()
+    jacare6.desenho()
+    jacare7.desenho()
+    jacare8.desenho()
+    jacare9.desenho()
     if jogador.vivo:
             if movimento_esquerda or movimento_direita or movimento_Cima or movimento_Baixo:
                 jogador.atualizar_acao(1)
             
                 
             else:
+                #faz o bolsonaro se movimntar aleatoriamente atras do lula
+                print("x",jogador.rect.x,"inimigo",inimigo.rect.x)
+                if inimigo.rect.x > jogador.rect.x:
+                    inimigo.rect.x -= inimigo.velocidade
+                if inimigo.rect.x < jogador.rect.x:
+                    inimigo.rect.x += inimigo.velocidade
+                if inimigo.rect.y > jogador.rect.y:
+                    inimigo.rect.y -= inimigo.velocidade
+                if inimigo.rect.y < jogador.rect.y:
+                    inimigo.rect.y += inimigo.velocidade
                 jogador.atualizar_acao(0)
-                #aqui envia os movimentos que o personagem vai fazer por Falso e True
-            jogador.movimento(movimento_esquerda, movimento_direita , movimento_Cima, movimento_Baixo)
-            inimigo.movimento(movimento_direita, movimento_esquerda , movimento_Baixo, movimento_Cima)
+                inimigo.atualizar_acao(0)
+            jogador.movimento(movimento_esquerda, movimento_direita, movimento_Cima, movimento_Baixo)
+            inimigo.movimento(movimento_direita, movimento_esquerda,movimento_Baixo ,movimento_Cima )
+            jacare.mov(True)
+            jacare1.mov(True)
+            jacare2.mov(True)
+            jacare3.mov(True)
+            jacare4.mov(True)
+            jacare5.mov(True)
+            jacare6.mov(True)
+            jacare7.mov(True)
+            jacare8.mov(True)
+            jacare9.mov(True)
+
+
+   
     for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -170,6 +225,16 @@ while run:
                             movimento_Cima = False
                     if event.key == pygame.K_s:
                             movimento_Baixo = False
+                            
+            #se lula encontar com bolsonaro depois de 10 segudos que o jogo começou, o jogo acaba
+            encontro = pygame.image.load('lulabolso.jpg')
+            if pygame.time.get_ticks() - tempo > 10000:
+             if jogador.rect.colliderect(inimigo.rect):
+                tela.blit(encontro, (0, 0))
+                pygame.display.update()
+                pygame.time.delay(1000)
+                run = False
+
 
     pygame.display.update()
 
