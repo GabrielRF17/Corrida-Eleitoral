@@ -1,7 +1,10 @@
+from email.mime import image
 import pygame
 import os
+from pygame import font
 from random import randint
 import random
+from yaml import load
 pygame.init()
 
 TELA_LARGURA = 1380
@@ -45,7 +48,8 @@ class Lula(pygame.sprite.Sprite):
         self.frame_index = 0
         self.acao = 0
         self.atualizar_tempo = pygame.time.get_ticks()
-        
+        self.p=0
+        h=0
         animacao_tipo = ['Parado', 'Correr' ]
         scale=1
         for animacao in animacao_tipo:
@@ -60,6 +64,12 @@ class Lula(pygame.sprite.Sprite):
         self.image = self.animacao_lista[self.acao][self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
+    
+    def comida(self):
+        self.rect.x =randint(10,500)
+        self.rect.y=randint(10,500)
+    def mov1(self,movimento_esquerda):
+            self.rect.x = -500
     def mov(self,movimento_direita):
             dx=0
             if self.rect.x>randint(1500,100000):
@@ -68,6 +78,7 @@ class Lula(pygame.sprite.Sprite):
             self.virar = False
             self.direcao = 1
             self.rect.x += dx
+            
 
     def movimento(self, movimento_esquerda, movimento_direita, movimento_Cima, movimento_Baixo):
 
@@ -133,23 +144,35 @@ class Lula(pygame.sprite.Sprite):
 
 #personagens e seu local de imagens, local no mapa e velocidade
 jogador = Lula('Lula', 50, 50, 2, 10)
-inimigo = Lula('Bolsonaro', 500, 500, 2, 40)
+inimigo = Lula('Bolsonaro', 500, 500, 2, 25)
 jacare =  Lula('inimigo',50,200,2,20)
-jacare1 = Lula('inimigo',-50,400,2,20)
-jacare2 = Lula('inimigo',10,350,2,40)
-jacare3 = Lula('inimigo',20,300,2,30)
+jacare1 = Lula('inimigo',-50,400,2,15)
+jacare2 = Lula('inimigo',10,350,2,25)
+jacare3 = Lula('inimigo',20,300,2,12)
 jacare4 = Lula('inimigo',-30,250,2,10)
-jacare5 = Lula('inimigo',50,250,2,50)
+jacare5 = Lula('inimigo',50,250,2,19)
 jacare6 = Lula('inimigo',-50,250,2,15)
 jacare7 = Lula('inimigo',10,250,2,22)
-jacare8 = Lula('inimigo',20,250,2,35)
-jacare9 = Lula('inimigo',-30,250,2,41)
+jacare8 = Lula('inimigo',20,250,2,22)
+jacare9 = Lula('inimigo',-30,250,2,17)
+bife = Lula('Bife',50,50,2,0)
+cerveja = Lula('Cerveja',50,50,2,0)
 
-
+p=0
+pontuacao=0
+aleatorio=1
 run = True
 while run:
+    
+    txt= str(pontuacao)
+    pygame.font.init()
+    fonte=pygame.font.get_default_font()
+    fontesys=pygame.font.SysFont(fonte, 60)
+    txttela = fontesys.render(txt, 1, (0,0,0)) 
+    tela.blit(txttela,(1300,0)) 
+    pygame.display.update() 
     relogio.tick(FPS)
-
+    
     desenho_tela()
 
     jogador.atualizar_animacao()
@@ -165,6 +188,10 @@ while run:
     jacare7.desenho()
     jacare8.desenho()
     jacare9.desenho()
+    if aleatorio==0:
+        bife.desenho()
+    else:
+        cerveja.desenho()
     if jogador.vivo:
             if movimento_esquerda or movimento_direita or movimento_Cima or movimento_Baixo:
                 jogador.atualizar_acao(1)
@@ -172,7 +199,7 @@ while run:
                 
             else:
                 #faz o bolsonaro se movimntar aleatoriamente atras do lula
-                print("x",jogador.rect.x,"inimigo",inimigo.rect.x)
+               if p==1: 
                 if inimigo.rect.x > jogador.rect.x:
                     inimigo.rect.x -= inimigo.velocidade
                 if inimigo.rect.x < jogador.rect.x:
@@ -184,7 +211,10 @@ while run:
                 jogador.atualizar_acao(0)
                 inimigo.atualizar_acao(0)
             jogador.movimento(movimento_esquerda, movimento_direita, movimento_Cima, movimento_Baixo)
-            inimigo.movimento(movimento_direita, movimento_esquerda,movimento_Baixo ,movimento_Cima )
+            if p==1:
+             inimigo.movimento(movimento_direita, movimento_esquerda,movimento_Baixo ,movimento_Cima )
+            else:
+                inimigo.mov1(True)
             jacare.mov(True)
             jacare1.mov(True)
             jacare2.mov(True)
@@ -195,6 +225,7 @@ while run:
             jacare7.mov(True)
             jacare8.mov(True)
             jacare9.mov(True)
+
 
 
    
@@ -228,12 +259,33 @@ while run:
                             
             #se lula encontar com bolsonaro depois de 10 segudos que o jogo começou, o jogo acaba
             encontro = pygame.image.load('lulabolso.jpg')
-            if pygame.time.get_ticks() - tempo > 10000:
-             if jogador.rect.colliderect(inimigo.rect):
+            if pygame.time.get_ticks() - tempo > 0:
+             if jogador.rect.colliderect(inimigo.rect ) or  jogador.rect.colliderect(jacare.rect) or  jogador.rect.colliderect(jacare1.rect ) or  jogador.rect.colliderect(jacare2.rect ) or  jogador.rect.colliderect(jacare3.rect ) or  jogador.rect.colliderect(jacare4.rect ) or  jogador.rect.colliderect(jacare5.rect ) or  jogador.rect.colliderect(jacare6.rect ) or  jogador.rect.colliderect(jacare7.rect ) or  jogador.rect.colliderect(jacare8.rect ) or  jogador.rect.colliderect(jacare9.rect ):
                 tela.blit(encontro, (0, 0))
                 pygame.display.update()
-                pygame.time.delay(1000)
+                
                 run = False
+            if jogador.rect.colliderect(bife.rect) or jogador.rect.colliderect(cerveja.rect):
+                
+                pygame.display.update()
+                
+                if aleatorio==1:
+                    cerveja.comida()
+                    pontuacao+=10
+                    aleatorio=0 
+                else:
+                    bife.comida()
+                    pontuacao+=10
+                    aleatorio=1
+                
+                
+
+
+
+               
+
+            
+            
 
 
     pygame.display.update()
