@@ -1,11 +1,9 @@
-from email.mime import image
-from time import sleep
+
 import pygame
 import os
 from pygame import font
 from random import randint
 import random
-from yaml import load
 pygame.init()
 
 TELA_LARGURA = 1380
@@ -21,9 +19,8 @@ FPS = 60
 
 pygame.mixer.init()
 pygame.mixer.music.load('musicafundo.mp3')
-pygame.mixer.music.play(-1)
+pygame.mixer.music.play()
 
-tempo =  0
 movimento_esquerda = False
 movimento_direita = False
 movimento_Cima = False
@@ -32,8 +29,9 @@ movimento_Baixo = False
 tela_fundo = (0, 0, 0)
 
 def desenho_tela():
-    fundo=pygame.image.load('0.jpg')
+    fundo=(pygame.image.load('0.jpg'))
     tela.blit(fundo,(0,0))
+
 
 class Lula(pygame.sprite.Sprite):
     def __init__(self, jogador_tipo, x, y, scale, velocidade):
@@ -69,8 +67,7 @@ class Lula(pygame.sprite.Sprite):
     def comida(self):
         self.rect.x =randint(10,500)
         self.rect.y=randint(10,500)
-    def mov1(self,movimento_esquerda):
-            self.rect.x = -500
+    
     def mov(self,movimento_direita):
             dx=0
             if self.rect.x>randint(1500,100000):
@@ -119,6 +116,44 @@ class Lula(pygame.sprite.Sprite):
         
         self.rect.x += dx
         self.rect.y += dy
+    def mov1(self, movimento_esquerda, movimento_direita, movimento_Cima, movimento_Baixo):
+
+
+        dx = 0
+        dy=0
+        
+        if movimento_esquerda:
+            
+            dx = -self.velocidade
+            self.virar = True
+            self.direcao = -1
+            
+        if movimento_direita:
+
+            dx = self.velocidade
+            self.virar = False
+            self.direcao = 1
+        
+        if movimento_Baixo:
+
+            dy = self.velocidade
+            self.virar = False
+            self.direcao = 1
+            
+        if movimento_Cima:
+
+            dy = -self.velocidade
+            self.virar = False
+            self.direcao = -1
+            
+        if movimento_esquerda and movimento_Baixo:
+            self.virar = True
+        
+        if movimento_esquerda and movimento_Cima:
+            self.virar = True
+        
+        self.rect.x += dx
+        self.rect.y += dy
        
         
     def atualizar_animacao(self):
@@ -144,6 +179,7 @@ class Lula(pygame.sprite.Sprite):
             tela.blit(pygame.transform.flip(self.image, self.virar, False), self.rect)
 
 #personagens e seu local de imagens, local no mapa e velocidade
+caminhao = Lula ('Caminhao',1280,0,2,2)
 jogador = Lula('Lula', 50, 50, 2, 10)
 inimigo = Lula('Bolsonaro', 500, 500, 2, 25)
 jacare =  Lula('inimigo',50,200,2,5)
@@ -158,8 +194,8 @@ jacare8 = Lula('inimigo',20,250,2,10)
 jacare9 = Lula('inimigo',-30,250,2,11)
 bife = Lula('Bife',100,100,5,0)
 cerveja = Lula('Cerveja',150,50,5,0)
-Fase = Lula('fase',1232, 500,2,0)
-pegadinha = Lula ('pegadinha',150,500,2,0)
+Fase = Lula('fase',100,520,2,0)
+pegadinha = Lula ('pegadinha',1280, 480,2,0)
 
 p=0
 pontuacao=0
@@ -181,6 +217,8 @@ while run:
 
     jogador.atualizar_animacao()
     jogador.desenho()
+    '''if fase == -1:'''
+    caminhao.desenho()
     if fase == 2:
         inimigo.desenho()
     if fase == 0 or fase == 2:
@@ -221,6 +259,8 @@ while run:
                     inimigo.rect.y += inimigo.velocidade
                 jogador.atualizar_acao(0)
                 inimigo.atualizar_acao(0)
+            '''if fase == -1:'''
+            caminhao.mov1(True,False,False,True)
             jogador.movimento(movimento_esquerda, movimento_direita, movimento_Cima, movimento_Baixo)
             inimigo.movimento(movimento_direita, movimento_esquerda,movimento_Baixo ,movimento_Cima )
             jacare.mov(True)
@@ -269,8 +309,8 @@ while run:
             encontro = pygame.image.load('lulabolso.jpg')
             #aumenta o tamanho da imagem
             encontro = pygame.transform.scale(encontro, (1400, 700))
-            if pygame.time.get_ticks() - tempo > 0:
-             if fase ==0 or fase ==2:
+            
+            if fase ==0 or fase ==2:
               if jogador.rect.colliderect(jacare.rect) or  jogador.rect.colliderect(jacare1.rect ) or  jogador.rect.colliderect(jacare2.rect ) or  jogador.rect.colliderect(jacare3.rect ) or  jogador.rect.colliderect(jacare4.rect ) or  jogador.rect.colliderect(jacare5.rect ) or  jogador.rect.colliderect(jacare6.rect ) or  jogador.rect.colliderect(jacare7.rect ) or  jogador.rect.colliderect(jacare8.rect ) or  jogador.rect.colliderect(jacare9.rect ):
                 tela.blit(encontro, (0, 0))
                 pygame.display.update()
@@ -293,7 +333,7 @@ while run:
                 pygame.time.delay(5000)
                 run = False
                 pygame.quit()
-             if jogador.rect.colliderect(inimigo.rect ) :
+            if jogador.rect.colliderect(inimigo.rect ) :
               if fase == 2:
                 tela.blit(encontro, (0, 0))
                 pygame.display.update()
@@ -330,7 +370,7 @@ while run:
                     pontuacao+=15
                     aleatorio=1
     # se a pontuação for maior que 100, o jogo acaba
-    if pontuacao>=100:
+    if pontuacao>=14:
         fase = 1
         #Escreve na tela ache o portal para passar de fase
         pygame.font.init()
@@ -348,6 +388,7 @@ while run:
         if jogador.rect.colliderect(pegadinha.rect) :
             print ("perdeu")
             fase=2
+            pontuacao=0
     pygame.display.update()
 
 pygame.quit()
