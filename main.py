@@ -29,7 +29,7 @@ movimento_direita = False
 movimento_Cima = False
 movimento_Baixo = False
 
-tela_fundo = (227, 38, 54)
+tela_fundo = (0, 0, 0)
 
 def desenho_tela():
     fundo=pygame.image.load('0.jpg')
@@ -146,23 +146,26 @@ class Lula(pygame.sprite.Sprite):
 #personagens e seu local de imagens, local no mapa e velocidade
 jogador = Lula('Lula', 50, 50, 2, 10)
 inimigo = Lula('Bolsonaro', 500, 500, 2, 25)
-jacare =  Lula('inimigo',50,200,2,20)
-jacare1 = Lula('inimigo',-50,400,2,15)
-jacare2 = Lula('inimigo',10,350,2,25)
-jacare3 = Lula('inimigo',20,300,2,12)
-jacare4 = Lula('inimigo',-30,250,2,10)
-jacare5 = Lula('inimigo',50,250,2,19)
-jacare6 = Lula('inimigo',-50,250,2,15)
-jacare7 = Lula('inimigo',10,250,2,22)
-jacare8 = Lula('inimigo',20,250,2,22)
-jacare9 = Lula('inimigo',-30,250,2,17)
-bife = Lula('Bife',50,50,5,0)
-cerveja = Lula('Cerveja',50,50,5,0)
+jacare =  Lula('inimigo',50,200,2,5)
+jacare1 = Lula('inimigo',-50,400,2,7)
+jacare2 = Lula('inimigo',10,350,2,8)
+jacare3 = Lula('inimigo',20,300,2,10)
+jacare4 = Lula('inimigo',-30,250,2,9)
+jacare5 = Lula('inimigo',50,250,2,8)
+jacare6 = Lula('inimigo',-50,250,2,4)
+jacare7 = Lula('inimigo',10,250,2,5)
+jacare8 = Lula('inimigo',20,250,2,10)
+jacare9 = Lula('inimigo',-30,250,2,11)
+bife = Lula('Bife',100,100,5,0)
+cerveja = Lula('Cerveja',150,50,5,0)
+Fase = Lula('fase',1232, 500,2,0)
+pegadinha = Lula ('pegadinha',150,500,2,0)
 
 p=0
 pontuacao=0
 aleatorio=1
 run = True
+fase = 0
 while run:
     
     txt= str(pontuacao)
@@ -178,20 +181,26 @@ while run:
 
     jogador.atualizar_animacao()
     jogador.desenho()
-    inimigo.desenho()
-    jacare.desenho()
-    jacare1.desenho()
-    jacare2.desenho()
-    jacare3.desenho()
-    jacare4.desenho()
-    jacare5.desenho()
-    jacare6.desenho()
-    jacare7.desenho()
-    jacare8.desenho()
-    jacare9.desenho()
-    if aleatorio==0:
+    if fase == 2:
+        inimigo.desenho()
+    if fase == 0 or fase == 2:
+        jacare.desenho()
+        jacare1.desenho()
+        jacare2.desenho()
+        jacare3.desenho()
+        jacare4.desenho()
+        jacare5.desenho()
+        jacare6.desenho()
+        jacare7.desenho()
+        jacare8.desenho()
+        jacare9.desenho()
+    if fase ==1:
+        Fase.desenho()
+        pegadinha.desenho()
+    if fase == 0 or fase == 2: 
+     if aleatorio==0:
         bife.desenho()
-    else:
+     else:
         cerveja.desenho()
     if jogador.vivo:
             if movimento_esquerda or movimento_direita or movimento_Cima or movimento_Baixo:
@@ -199,8 +208,9 @@ while run:
             
                 
             else:
+             if fase == 2:
                 #faz o bolsonaro se movimntar aleatoriamente atras do lula
-               if p==1: 
+               
                 if inimigo.rect.x > jogador.rect.x:
                     inimigo.rect.x -= inimigo.velocidade
                 if inimigo.rect.x < jogador.rect.x:
@@ -212,10 +222,7 @@ while run:
                 jogador.atualizar_acao(0)
                 inimigo.atualizar_acao(0)
             jogador.movimento(movimento_esquerda, movimento_direita, movimento_Cima, movimento_Baixo)
-            if p==1:
-             inimigo.movimento(movimento_direita, movimento_esquerda,movimento_Baixo ,movimento_Cima )
-            else:
-                inimigo.mov1(True)
+            inimigo.movimento(movimento_direita, movimento_esquerda,movimento_Baixo ,movimento_Cima )
             jacare.mov(True)
             jacare1.mov(True)
             jacare2.mov(True)
@@ -263,7 +270,8 @@ while run:
             #aumenta o tamanho da imagem
             encontro = pygame.transform.scale(encontro, (1400, 700))
             if pygame.time.get_ticks() - tempo > 0:
-             if jogador.rect.colliderect(inimigo.rect ) or  jogador.rect.colliderect(jacare.rect) or  jogador.rect.colliderect(jacare1.rect ) or  jogador.rect.colliderect(jacare2.rect ) or  jogador.rect.colliderect(jacare3.rect ) or  jogador.rect.colliderect(jacare4.rect ) or  jogador.rect.colliderect(jacare5.rect ) or  jogador.rect.colliderect(jacare6.rect ) or  jogador.rect.colliderect(jacare7.rect ) or  jogador.rect.colliderect(jacare8.rect ) or  jogador.rect.colliderect(jacare9.rect ):
+             if fase ==0 or fase ==2:
+              if jogador.rect.colliderect(jacare.rect) or  jogador.rect.colliderect(jacare1.rect ) or  jogador.rect.colliderect(jacare2.rect ) or  jogador.rect.colliderect(jacare3.rect ) or  jogador.rect.colliderect(jacare4.rect ) or  jogador.rect.colliderect(jacare5.rect ) or  jogador.rect.colliderect(jacare6.rect ) or  jogador.rect.colliderect(jacare7.rect ) or  jogador.rect.colliderect(jacare8.rect ) or  jogador.rect.colliderect(jacare9.rect ):
                 tela.blit(encontro, (0, 0))
                 pygame.display.update()
                 run = False
@@ -285,33 +293,61 @@ while run:
                 pygame.time.delay(5000)
                 run = False
                 pygame.quit()
-                
-
-            if jogador.rect.colliderect(bife.rect) or jogador.rect.colliderect(cerveja.rect):
-                
+             if jogador.rect.colliderect(inimigo.rect ) :
+              if fase == 2:
+                tela.blit(encontro, (0, 0))
                 pygame.display.update()
+                run = False
+                print ('Você perdeu virou jacaré')
                 
-                if aleatorio==1:
+                #escreve na tela que o jogador perdeu
+                pygame.font.init()
+                fonte=pygame.font.get_default_font()
+                fontesys=pygame.font.SysFont(fonte, 60)
+                txttela = fontesys.render('VOCÊ PERDEU VIROU JACARE', 1, (255,0,0))
+                tela.blit(txttela,(400,400))
+                pygame.display.update()
+               
+                #muda o audio para o audio de derrota
+                pygame.mixer.music.load('derrota.mp3')
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(0.9)
+                pygame.display.update()
+                pygame.time.delay(5000)
+                run = False
+                pygame.quit()
+            if fase == 0 or fase == 2: 
+             if aleatorio==1:    
+                if jogador.rect.colliderect(cerveja.rect):
+                    pygame.display.update()
                     cerveja.comida()
                     pontuacao+=15
                     aleatorio=0 
-                else:
+             else:
+                if jogador.rect.colliderect(bife.rect):
+                    pygame.display.update()
                     bife.comida()
                     pontuacao+=15
                     aleatorio=1
     # se a pontuação for maior que 100, o jogo acaba
-    if pontuacao>100:
+    if pontuacao>=100:
+        fase = 1
         #Escreve na tela ache o portal para passar de fase
         pygame.font.init()
         fonte=pygame.font.get_default_font()
         fontesys=pygame.font.SysFont(fonte, 40)
-        txttela = fontesys.render('ENTRE NO PORTAL PARA PASSAR DE FASE', 1, (255,0,0))
-        tela.blit(txttela,(300,400))
+        txttela = fontesys.render('Escolha um Lado', 1, (255,0,0))
+        tela.blit(txttela,(500,400))
         run = True
         # coloca a imagem do portal para aparecer na tela no inicio do jogo
-        portal = pygame.image.load('portal.png')
-        portal = pygame.transform.scale(portal, (100, 100))
-        tela.blit(portal, (1000, 100))
+     
+        if jogador.rect.colliderect(Fase.rect) :
+            print ("fsi")
+            fase=2
+            pontuacao=0
+        if jogador.rect.colliderect(pegadinha.rect) :
+            print ("perdeu")
+            fase=2
     pygame.display.update()
 
 pygame.quit()
