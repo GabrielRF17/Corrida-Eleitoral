@@ -1,9 +1,7 @@
 
 import pygame
 import os
-from pygame import font
 from random import randint
-import random
 pygame.init()
 
 #tamanho da tela
@@ -427,7 +425,6 @@ while run:
 
 
 
-   
     for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -457,9 +454,9 @@ while run:
                             movimento_Cima = False
                     if event.key == pygame.K_s:
                             movimento_Baixo = False
-            
-            if fase ==0 or fase ==2:
-              if Lula.rect.colliderect(jacare.rect) or  Lula.rect.colliderect(jacare1.rect ) or  Lula.rect.colliderect(jacare2.rect ) or  Lula.rect.colliderect(jacare3.rect ) or  Lula.rect.colliderect(jacare4.rect ) or  Lula.rect.colliderect(jacare5.rect ) or  Lula.rect.colliderect(jacare6.rect ) or  Lula.rect.colliderect(jacare7.rect ) or  Lula.rect.colliderect(jacare8.rect ) or  Lula.rect.colliderect(jacare9.rect ):
+    
+    if fase ==0 or fase ==2:
+        if Lula.rect.colliderect(jacare.rect) or  Lula.rect.colliderect(jacare1.rect ) or  Lula.rect.colliderect(jacare2.rect ) or  Lula.rect.colliderect(jacare3.rect ) or  Lula.rect.colliderect(jacare4.rect ) or  Lula.rect.colliderect(jacare5.rect ) or  Lula.rect.colliderect(jacare6.rect ) or  Lula.rect.colliderect(jacare7.rect ) or  Lula.rect.colliderect(jacare8.rect ) or  Lula.rect.colliderect(jacare9.rect ):
                 
                 encontro = pygame.image.load('img/bolsonaroganho.png')
                 tela.blit(encontro, (0, 0))
@@ -474,7 +471,7 @@ while run:
                 run = False
                 pygame.quit()
 
-              if Bolsonaro.rect.colliderect(faca.rect) or  Bolsonaro.rect.colliderect(faca1.rect ) or  Bolsonaro.rect.colliderect(faca2.rect ) or  Bolsonaro.rect.colliderect(faca3.rect ) or  Bolsonaro.rect.colliderect(faca4.rect ) or  Bolsonaro.rect.colliderect(faca5.rect ) or  Bolsonaro.rect.colliderect(faca6.rect ) or  Bolsonaro.rect.colliderect(faca7.rect ) or  Bolsonaro.rect.colliderect(faca8.rect ) or  Bolsonaro.rect.colliderect(faca9.rect ):
+        if Bolsonaro.rect.colliderect(faca.rect) or  Bolsonaro.rect.colliderect(faca1.rect ) or  Bolsonaro.rect.colliderect(faca2.rect ) or  Bolsonaro.rect.colliderect(faca3.rect ) or  Bolsonaro.rect.colliderect(faca4.rect ) or  Bolsonaro.rect.colliderect(faca5.rect ) or  Bolsonaro.rect.colliderect(faca6.rect ) or  Bolsonaro.rect.colliderect(faca7.rect ) or  Bolsonaro.rect.colliderect(faca8.rect ) or  Bolsonaro.rect.colliderect(faca9.rect ):
                 encontro = pygame.image.load('img/lulaganho.png')
                 tela.blit(encontro, (0, 0))
                 pygame.display.update()
@@ -488,7 +485,7 @@ while run:
                 pygame.time.delay(5000)
                 run = False
                 pygame.quit()
-            if z.rect.colliderect(w.rect ) :
+        if z.rect.colliderect(w.rect ) :
               if fase == 2:
                 if z==Lula:
                     encontro = pygame.image.load('img/bolsonaroganho.png')
@@ -512,7 +509,7 @@ while run:
 
                 pygame.quit()
 
-            if fase == 0 or fase == 2: 
+    if fase == 0 or fase == 2: 
              if aleatorio==1:    
                 if z.rect.colliderect(cerveja.rect):
                     pygame.display.update()
@@ -578,3 +575,5 @@ while run:
     pygame.display.update()
 
 pygame.quit()
+
+
