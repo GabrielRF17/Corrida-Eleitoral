@@ -17,8 +17,8 @@ FPS = 60
 #Colocando a música de fundo do jogo
 
 pygame.mixer.init()
-'''pygame.mixer.music.load('musicafundo.mp3')
-pygame.mixer.music.play()'''
+pygame.mixer.music.load('musicafundo.mp3')
+pygame.mixer.music.play()
 #inicia fase -1 para mostrar menu inicial
 fase = -1
 movimento_esquerda = False
@@ -34,11 +34,11 @@ def desenho_tela():
     elif fase ==-1:
         fundo=(pygame.image.load('Fundo/Inicio.png'))
     elif fase ==0:
-        fundo=(pygame.image.load('Fundo/0.jpg'))
+        fundo=(pygame.image.load('Fundo/Fundo.png'))
     elif fase ==1:
-        fundo=(pygame.image.load('Fundo/0.jpg'))
+        fundo=(pygame.image.load('Fundo/Fundo.png'))
     elif fase == 2:
-        fundo=(pygame.image.load('Fundo/0.jpg'))
+        fundo=(pygame.image.load('Fundo/Fundo.png'))
     tela.blit(fundo,(0,0))
 
 
@@ -56,8 +56,6 @@ class eleicao(pygame.sprite.Sprite):
         self.frame_index = 0
         self.acao = 0
         self.atualizar_tempo = pygame.time.get_ticks()
-        #gambiarra pra bug q n sei como resolver para bolsonaro parecer q ta correndo
-        
         animacao_tipo = ['0.png', '1.png','2.png']
         #recebe qtas imagens tem
         for animacao in animacao_tipo:
@@ -135,7 +133,7 @@ class eleicao(pygame.sprite.Sprite):
     def mov1(self, movimento_esquerda, movimento_direita, movimento_Cima, movimento_Baixo):
 
 
-        dx = 0
+        dx=0
         dy=0
         
         if movimento_esquerda:
@@ -432,7 +430,7 @@ while run:
 
             if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_l:
-                        fase=fase+1
+                        pontuacao=100
                     if event.key == pygame.K_a:
                             movimento_esquerda = True
                     if event.key == pygame.K_d:
@@ -456,6 +454,7 @@ while run:
                             movimento_Baixo = False
     
     if fase ==0 or fase ==2:
+        
         if Lula.rect.colliderect(jacare.rect) or  Lula.rect.colliderect(jacare1.rect ) or  Lula.rect.colliderect(jacare2.rect ) or  Lula.rect.colliderect(jacare3.rect ) or  Lula.rect.colliderect(jacare4.rect ) or  Lula.rect.colliderect(jacare5.rect ) or  Lula.rect.colliderect(jacare6.rect ) or  Lula.rect.colliderect(jacare7.rect ) or  Lula.rect.colliderect(jacare8.rect ) or  Lula.rect.colliderect(jacare9.rect ):
                 
                 encontro = pygame.image.load('img/bolsonaroganho.png')
@@ -472,26 +471,20 @@ while run:
                 pygame.quit()
 
         if Bolsonaro.rect.colliderect(faca.rect) or  Bolsonaro.rect.colliderect(faca1.rect ) or  Bolsonaro.rect.colliderect(faca2.rect ) or  Bolsonaro.rect.colliderect(faca3.rect ) or  Bolsonaro.rect.colliderect(faca4.rect ) or  Bolsonaro.rect.colliderect(faca5.rect ) or  Bolsonaro.rect.colliderect(faca6.rect ) or  Bolsonaro.rect.colliderect(faca7.rect ) or  Bolsonaro.rect.colliderect(faca8.rect ) or  Bolsonaro.rect.colliderect(faca9.rect ):
+                
                 encontro = pygame.image.load('img/lulaganho.png')
                 tela.blit(encontro, (0, 0))
                 pygame.display.update()
                 run = False
-                
-                #muda o audio para o audio de derrota
-                pygame.mixer.music.load('derrota.mp3')
-                pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(0.9)
-                pygame.display.update()
-                pygame.time.delay(5000)
-                run = False
+                pygame.time.delay(3000)
                 pygame.quit()
-        if z.rect.colliderect(w.rect ) :
+                
+    if z.rect.colliderect(w.rect) :
               if fase == 2:
                 if z==Lula:
                     encontro = pygame.image.load('img/bolsonaroganho.png')
                     tela.blit(encontro, (0, 0))
                     pygame.display.update()
-                    
                     pygame.mixer.music.load('derrota.mp3')
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(0.9)
@@ -510,27 +503,27 @@ while run:
                 pygame.quit()
 
     if fase == 0 or fase == 2: 
-             if aleatorio==1:    
-                if z.rect.colliderect(cerveja.rect):
+            if aleatorio==1:    
+                if z.rect.colliderect(x2.rect):
                     pygame.display.update()
-                    cerveja.comida()
+                    x2.comida()
                     pontuacao+=15
                     aleatorio=0 
-             else:
-                if z.rect.colliderect(bife.rect):
+            else:
+                if z.rect.colliderect(x1.rect):
                     pygame.display.update()
-                    bife.comida()
+                    x1.comida()
                     pontuacao+=15
                     aleatorio=1
-    # se a pontuação for maior que 100, o jogo acaba
+        
+    # se a pontuação for maior que 100, o jogo acaba ou vai para 2 turno
     
-    if pontuacao>=14 and cont ==0:
+    if pontuacao>=100 and cont ==0:
         if z==Bolsonaro:
             Lula = eleicao('Lula', 3000, 3000,  0)
         elif z==Lula: 
             Bolsonaro = eleicao('Bolsonaro', 3000, 3000,  0)
         fase = 1
-        #Escreve na tela ache o portal para passar de fase
         pygame.font.init()
         fonte=pygame.font.get_default_font()
         fontesys=pygame.font.SysFont(fonte, 40)
@@ -558,15 +551,15 @@ while run:
             pygame.display.update()
             pygame.time.delay(3000)
             run =False
-    elif pontuacao >=15 and z==Lula:
+    elif pontuacao >=100 and z==Lula:
         encontro = pygame.image.load('img/lulaganho.png')
         tela.blit(encontro, (0, 0))
         pygame.display.update()
         pygame.time.delay(3000)
 
         run = False
-    elif pontuacao >=15 and z==Bolsonaro:
-        encontro = pygame.image.load('img/bolsonaroaganho.png')
+    elif pontuacao >=100 and z==Bolsonaro:
+        encontro = pygame.image.load('img/bolsonaroganho.png')
         tela.blit(encontro, (0, 0))
         pygame.display.update()
         pygame.time.delay(3000)
