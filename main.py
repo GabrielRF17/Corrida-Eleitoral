@@ -41,7 +41,7 @@ def test_inimigos():
         assert faca8.mov(True)
         assert faca9.mov(True)
 
-def test_seta():
+def test_suite_seta():
     if opcao == 0:
         assert seta ('seta',520,180,0)
     if opcao == 1:
@@ -51,7 +51,16 @@ def test_seta():
     if opcao == 3:
         assert seta ('seta',510,400,0)
 
-    
+def test_suite_fase_instucoes():
+    fase==-2
+def test_suite_fase_tela_inicio():
+    fase==-1
+def test_suite_fase1():
+    fase==0
+def test_suite_fase2():
+    fase==2
+def test_suite_fase_escolha_voto():
+    fase==1
 
 #tamanho da tela
 TELA_LARGURA = 1380
