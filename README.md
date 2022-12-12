@@ -1,7 +1,9 @@
 # Corrida-Eleitoral
 Melhorias:
-facilitação de adição de mais candidatos e facilitação de adição de novos inimigos. ex: <variavel>=eleicao("<nome candidato>"<posição x> <posição y> <velocidade>)
-para adicionar candidato e <variavel>=eleicao("<nome inimigo>" <posição x> <posição y> <velocidade>) 
+facilitação de adição de mais candidatos e facilitação de adição de novos inimigos. ex: 
+<variavel>=eleicao("<nome candidato>"<posição x> <posição y> <velocidade>) para adicionar candidato
+
+<variavel>=eleicao("<nome inimigo>" <posição x> <posição y> <velocidade>) para adicionar mais inimigo
 
 Testes:
 caixa preta e caixa branca:
