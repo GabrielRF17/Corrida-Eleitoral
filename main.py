@@ -2,7 +2,56 @@
 import pygame
 import os
 from random import randint
+import pytest
 pygame.init()
+def test_posicao_lula():
+    assert Lula.rect.x<=1300
+    assert Lula.rect.y<=560
+    assert Lula.rect.y>=0
+    assert Lula.rect.x>=0
+def test_posicao_bolsonaro():
+    assert Bolsonaro.rect.x<=1300
+    assert Bolsonaro.rect.y<=560
+    assert Lula.rect.y>=0
+    assert Lula.rect.x>=0
+def test_posicao_caminhao():
+    assert caminhao.rect.x>-700
+
+def test_inimigos():
+    if z==Lula:
+        assert jacare.mov(True)
+        assert jacare1.mov(True)
+        assert jacare2.mov(True)
+        assert jacare3.mov(True)
+        assert jacare4.mov(True)
+        assert jacare5.mov(True)
+        assert jacare6.mov(True)
+        assert jacare7.mov(True)
+        assert jacare8.mov(True)
+        assert jacare9.mov(True)
+    elif z==Bolsonaro:
+        assert faca.mov(True)
+        assert faca1.mov(True)
+        assert faca2.mov(True)
+        assert faca3.mov(True)
+        assert faca4.mov(True)
+        assert faca5.mov(True)
+        assert faca6.mov(True)
+        assert faca7.mov(True)
+        assert faca8.mov(True)
+        assert faca9.mov(True)
+
+def test_seta():
+    if opcao == 0:
+        assert seta ('seta',520,180,0)
+    if opcao == 1:
+        assert seta ('seta',370,250,0)
+    if opcao == 2:
+        assert seta ('seta',350,330,0)
+    if opcao == 3:
+        assert seta ('seta',510,400,0)
+
+    
 
 #tamanho da tela
 TELA_LARGURA = 1380
